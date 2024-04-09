@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyFlix</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add custom CSS for dark theme and hover effect */
+        body {
+            background-color: #333;
+            color: #fff;
+        }
+        .movie-card {
+            background-color: #222;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .movie-card:hover {
+            background-color: #444;
+        }
+        .movie-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .search-label {
+            color: #fff;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">MyFlix</a>
+            <form class="form-inline">
+                <label for="searchInput" class="sr-only">Search</label>
+                <input id="searchInput" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="row" id="movieGrid"></div>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-dark">
+        <div class="container text-center">
+            <span class="text-muted">MyFlix &copy; 2024</span>
+        </div>
+    </footer>
+
+    <script>
+        // Fetch movie records from OMDb API
+        const apiKey = '1a501fcb';
+        const apiUrl = `http://www.omdbapi.com/?s=action&type=movie&apikey=${apiKey}`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const movies = data.Search;
+                const movieGrid = document.getElementById('movieGrid');
+
+                movies.forEach(movie => {
+                    const movieCard = document.createElement('div');
+                    movieCard.classList.add('col-sm-3', 'movie-card');
+                    movieCard.innerHTML = `
+                        <img src="${movie.Poster}" alt="${movie.Title}">
+                        <h5>${movie.Title}</h5>
+                        <p>${movie.Year}</p>
+                    `;
+                    movieGrid.appendChild(movieCard);
+                });
+            })
+            .catch(error => console.log(error));
+    </script>
+</body>
+</html>
